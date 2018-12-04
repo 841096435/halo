@@ -1,0 +1,4 @@
+1 JavaSE 设计模式 JVM+GC
+2 JavaWeb mysql jdbc  SSM(AOP+JDBCTemplate)
+3 XML Linux Nginx maven junit  swagger ssh
+4 solr redis mongodb  memcache 高并发
