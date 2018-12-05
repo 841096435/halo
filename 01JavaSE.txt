@@ -1,0 +1,83 @@
+总复习啦啦啦啦
+---------------------------------------------------------------------------
+多线程
+1.线程创建 三种方式 生命周期(创建-->start-->就绪/有资格没执行权-->获取CPU资源/运行-->run执行完毕-->死亡  sleep/wait进入阻塞)
+2.线程停止 stop()方法   interrupt()方法用来打断sleep()和wait()，两者区别 .yield()  .join() setPriority()
+3.ThreadLocal保证每个线程有自己的一份数据，实际上存储数据的数据结构是一个map，以线程名
+  为键，值即要保存的数据；可以用来做拦截器的性能分析，记录每个请求单独的执行时间
+4.Java代码利用HttpURLConnection/HttpsURLConnection类与外部产生网络通信
+5.HashTable在使用时锁是锁住整个容器对象的，而concurrentHashMap内部降低了锁的颗粒度，将
+  容器分成若干个segment进行加锁，不同区域可以正常并发
+6.ConcurrentLinkedQueue为非阻塞式队列，即超出固定容量值时拒绝数据放入；而LinkedBlockingQueue为
+  阻塞式队列，使用offer()方法放置超量数据时，会进入阻塞等待状态直到原有数据被移除
+7.CopyOnWriteArrayList原理即读写分离并进行数据的实时同步，当对A进行写操作时，A会产生副本B，
+  并让程序对B进行写操作而此时的读操作依旧对A执行，当写操作完成之后原有的A则被gc回收掉，
+  而B则充当原有容器的地位；适用于读操作远远多余写操作的场景(写操作过多时产生的副本变多)
+8.线程同步,synchronized(同步代码块/同步方法) 锁对象 单一线程操作数据时将其锁住 Lock lock=new ReentrantLock()
+  synchronized同步代码块报错自动释放锁 lock将锁带入坟墓 死锁 .unlock()放入finally结构
+9.线程通信,多个任务不同的线程操作同一数据 .wait()  .notify():唤醒其它线程 实现通信:多个代码块彼此同步(同一个锁)
+10.newSingleThreadExecutor() newScheduledThreadPool()  newFixedThreadPool() 线程池:管理和复用线程
+11.定时器:new Timer()   timer.schedule(new TimeTask(){run()}; ,delay,period)   timer.cancel()
+---------------------------------------------------------------------------
+面向对象
+1.类用来描述功能，对象用来使用功能 OOA(面向对象分析)  OOD(面向对象设计) OOP(面向对象编程)
+2.垃圾回收器调用finalize()方法，将没有引用的对象标记为垃圾等待统一回收(.gc方法执行回收)
+3.内部类(成员内部类、局部内部类、静态内部类、匿名内部类)
+4.接口 引用传递 成员变量和局部变量  对象数组(单个对象实例化时不能使用增强for) 
+5.权限修饰符(protexted不同包中的子类调用方法只能通过子类对象且在子类类体 public>protected>defult>private)  
+6.匿名对象 多态(动态绑定/运行时绑定，调用子类覆写的方法)  继承(extends非私有字段除构造方法，子类实例化时优先调用父类构造)
+7.覆写(子类方法与父类同名，返回值参数列表一致，权限不小于不小于父类)
+8.方法重载(参数列表 个数、类型以及先后顺序)
+9.构造器(对象实例化时系统自动调用，可重载，默认无参，与类名保持一致)
+10.抽象类(abstract，有构造，多个子类相同代码放到父抽象类中，不能实例化，与private/final/static冲突，继承需覆写所有抽象方法)
+11.代码块(静态代码块：类加载时执行一次 构造块/游离块：对象实例化前调用,可存放多个构造方法相同代码 局部代码块：方法中的)
+---------------------------------------------------------------------------
+JVM+GC
+1.五个区域，栈内存 堆内存 方法区(共享区) 寄存器  本地方法栈 基本结构
+2.启动流程 javac->java xxx-->装载配置-->jvm.cfg-->jvm.dll-->JNI本地方法-->main方法
+3.内存模型  主内存 副本内存 volatile
+4.GC算法 引用计数法 标记清除 标记压缩 复制算法  堆分代问题(Eden survivor:From/To,年老代)
+---------------------------------------------------------------------------
+集合
+1.List接口 ArrayList Vector(同步安全，方法synchronize，效率慢 .add .size .get .clear .remove) 内部数组
+2.集合注意只能存放对象，例如调用remove方法时不能直接传入基本类型数据，包装类声明
+3.遍历(两种for 迭代器Iterator：优点，遍历时删除操作不抛异常)
+4.LinkedList,双向链表指针移动，.push() .addFirst()插入到头节点 pop() .removeFirst()删除头节点  插入删除快  查询慢 先进先出
+5.Set是List体系下 无索引相关操作 哈希/树结构 自动排序 自动查重 对象内容相同依然可以放进去，equals()方法没有覆写
+6.HashSet() hashCode()：计算位置/equals()：内容比较 进行排序查重 方法与list基本一致 
+7.TreeSet() 排序 存放的对象实现Comparable 覆写comparaTo()方法自定义比较机制  比较器Comparator 也可实现(麻烦)
+8.Map键值对形式存储结构 Entry实例对象形式存储 键不可重复 .put() .clear() .remove .replace() .get() .size()
+9.HashMap/HashTable(线程同步) TreeMap(自定义排序)
+10.遍历: map.entrySet()，Set<Map.Entry<String, String>>   map.keySet()方法，获取所有键
+11.注意asList()数组转换为集合后，还需放入new ArrayList()构造中，否则对长度的操作会抛异常
+12.迭代器删除时用迭代器指定方式Iterator.remove()
+13.HashMap 垂直方向可变数组 水平单向链表 1.8红黑树结构 Set内部HashMap 存储值即键，对应值为NULL
+---------------------------------------------------------------------------
+IO流
+1.File类 .createNewFile  .mkdirs .delete .exists .list(文件名称String,放入Stirng[] ) .listFiles(封装File对象，放入File数组)
+2.异常,父类不抛异常、子类方法不能抛 throw手动抛异常终止程序 运行时 非运行时
+3.OutputStream字节输出流父类 FileOutputStream.write() FileInputStream.read()
+4.OutputStreamWriter(可传入编码)==FileWriter  InputStreamReader==FileReader 字节流不会用到缓冲区 字符流用到需.flush/.close
+5.PrintWriter 高级流装饰模式 .print .printf格式化
+6.对象(反)序列化 转换为字节序列 ObjectOutputStream transient属性(包括static)不会被序列化 实现Serializable接口 类名、属性会被序列化
+  方法不会被序列化 对象的引用属性也必须可序列化 .writeObject() .readObject() 设置静态常量serialVersionUID
+7.字符缓冲流BufferedWriter .newLine()动态换行  .readLine():一次读一行
+---------------------------------------------------------------------------
+JavaSE零散
+1.Socket ServerSocket .accept() 利用各自的IO流进行操作 .getHostAddress():获取客户端IP 长连接(ftp/socket) 短连接(http/udp)
+2.反射 .getModifiers .getDeclaredFields  .getDeclaredMethods .getReturnType .getSimpleName
+3.this本类/super父类:构造方法,首行不能同时出现 不能出现在静态方法中
+4.final static:调用方便 生命周期长 静态只能静态 随类加载而加载
+5.String类,直接赋值共享设计常量池equals()true 值不可以被更改 匿名对象 ==栈比较  equals堆内容比较  ....方法
+6.StringBuffer线程同步/StringBuilder  .append()  Math类  
+7.Date SimpleDateFormat  sdf.format(d):Date对象转换为字符串  sdf.parse(str):字符串解析成时间对象 
+8.Calendar.getInstance() c.get(Calender.YEAR)
+9.Object .clone() 方法为protected 子类需覆写 实现Cloneable接口 复制的对象为新开辟的一块空间 .getClass() 返回实例对象所在的类
+10.Random  random.nextInt(n) 0~n 不包括n  Collections/Arrays  .toString .copyOf .sort  .binarySearch(先sort) .asList
+---------------------------------------------------------------------------
+设计模式(实际应用场景)
+1.单例模式(懒/饿),线程池一般采用单例模式  类对象  servlet 资源共享时线程同步单例
+2.代理模式  静态代理(代理与目标需要在同一体系下) 动态代理(JDK代理:目标对象必须实现本体系接口,动态获取代理  Cglib代理:无需接口)
+   代理理念实现aop功能增强以及声明事务管理
+3.工厂模式 解耦合 多层业务对接时使用接口，实际实现使用其子类，获取时不能直接实例化，利用工厂获得本类引用
+---------------------------------------------------------------------------

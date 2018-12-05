@@ -1,0 +1,93 @@
+总复习啦啦啦啦
+---------------------------------------------------------------------------
+JavaWeb
+1.servlet装载需要容器 实质是class 生命周期(装载:构造器单例-->初始化:init-->服务:service处理请求响应-->销毁)
+2.request .getParameter .getParameterValues  .getParameterNames(枚举遍历hasMoreElements/nextElement) .getParameterMap
+3.Get用于请求 Post用于提交(请求不能被缓存) 四大域对象(page:this/request:一次请求响应/session:会话/application:服务器级别.getServletContext)
+4.cookie/session(两种手动销毁方式:默认30分钟)机制  
+5.转发(一次请求响应/服务器内部行为).getRequestDispatcher("路径").forward(req,res) 重定向.sendRedirect(两次请求响应 数据不安全 地址栏变化) 
+6.请求响应报文 请求行 请求头 请求体  状态行(状态码)  200~299:OK  300~399:资源重定向 500:内部代码错误 400~499:请求资源未找到
+7.jsp用于展示动态数据  <% %>  <%! %>:成员位置(变量/方法)  <%= %>:out.print("")中的代码
+8.<%@ page%>:导包/编码/错误页  <%@ include file="" %>:静态引入 <%@ tablib  %>:导入标签库 <jsp:include/forward> pageContext.findA
+9.EL/JSTL 过滤器(实现Filter接口)  监听器(实现ServletContextListener/ServletContextAttributeListener接口)
+10.文件上传下载  MD5不可逆加密 RSA非对称式算法 加密/验签(公钥素数乘积)  解密/加签(私钥两个巨大的素数)
+11.表单提交为锁机制同步  ajax异步刷新 原生固定五步骤 处理XML/Json数据 dataType  jQuery操作 跨域解决(js:src/jQuery:jsonp/CROS响应头)
+12.验证码(总字符集随机取出 响应图片到页面 存入session) 
+13.自定义标签：tld文件/自定义解释器类(继承SimpleTagSupport类覆写doTag方法)/web.xml中对标签进行注册/taglib指令引入
+14.M(Model)V(VIew)C(Controller) 持久层dao负责对数据库的CRUD动作  service层数据校验/业务逻辑/业务Bean  web层(接收数据给响应分发转向)
+---------------------------------------------------------------------------
+mysql+jdbc+pool
+1.mysql概念/安装  数据字典:是数据库的对象系统表,存放数据库相关信息   DDL 补充:truncate/drop
+2.数据类型(整数:TINYINT/SMALLINT/INT/BIGINT 小数:FLOAT/DOUBLE/DECIMAL 时间日期:DATE/TIME/DATETIME/TIMESTAMP 字符串:CHAR/VARCHAR/TEXT)
+3.约束(NOT NULL/UNIQUE/PRIMARY KEY AUTO_INCREMENT/BINARY:区分大小写/CHECK/联合主键)  语言类型:DML/DQL/DDL/DCL
+4.常用函数,时间日期: now() date_format(now(),"%y") 数值:abs() floor() ceil()
+5.关键字:distinct/(<>:不等于)/order by   where在分组前  having在分组后 聚合函数(sum/max/min/count/avg) limit x,-1:从x到末尾所有
+6.数据库设计(实体/属性/E-R图) 三范式  触发器(事件监听/before/after) 存储过程(sql函数)
+7.外键(级联删除) 视图:简化查询，等同于表   一变等变  视图不含主键不可操作
+8.索引(哈希索引/二叉树索引:当前引擎支持) 优化查询,快速寻址 主键自带索引(唯一约束too) 联合索引 where后第一个索引生效
+   索引存放在索引文件(需要维护):hash地址和二叉树结构 不易过多 一表6个 
+9.事务 ACID属性(原子性/隔离性/一致性/持久性)  事务步骤 savepoint point1/rollback to point1  DDL操作自动提交事务
+10.子查询(嵌套:内外查询都可独立/相关:内依赖外，效率不高可以存储过程代替)
+11.多表连接,内连接:inner join,显示相匹配行数据,会丢数据   左外/右外轻微丢数据:left join/right   
+12.jdbc Java标准规范 增删改 .execute()  查询.executeQuery()  四个对象 结果集游标移动 metaData
+13.PreparedStatement 预编译:性能高,引入占位符解决sql注入问题    批处理addBatch() executeBatch()
+14.dbcp:BasicDataSourceFactory c3p0:ComboPooledDataSource 第三种:存放到web容器中 dbcp属于Apache 程序向tomcat索取池(安全,不直接接触数据库)
+---------------------------------------------------------------------------
+Spring-IoC+springJDBCTemplate
+1.控制翻转  解除耦合  BeanFactory(接口)  applicationContext  工厂模式+反射  .getBean()
+2.依赖注入(DI)  setter:父bean声明该属性并预留setter方法,ref value/构造器constructor-arg,预留属性及构造器,支持list、map等 适合配置各种池对象bean
+3.注解,配置扫描根包(service/dao) @Component/@Resource/@Service/@Repository/@Autowired/@Qualifier/@Lazy/@Scope/@Primary
+4.web.xml ContextLoaderListener自动装配applicationContext(上下文容器,存放所有bean)
+5.利用jdbcTemplate去操作 extends JdbcDaoSupport 无需再预留属性和setter .update()  简单数据:queryForObject(sql,Integer.class,arg)
+  单个复杂数据 .queryForObject(sql,BeanPropertyRowMapper.newInstance(User.class))  一批 .query(sql,...)
+  列名属性不一致 自定义RowMapper接口匿名实现类 手动挨个为属性赋值  占位符为 "?"
+---------------------------------------------------------------------------
+SpringMVC(Restful+FreeMarker)
+1.DispatherServlet contextConfigLocation负责分发转向 mvc自带CharacterEncodingFilter web层轻量框架 
+2.运行机制:请求到Dispatcher->配置文件不存在映射->寻找defaultServlet映射目标资源,此处也可以作静态资源处理->交由HandlerMapping寻址
+  Controller->返回ModelAndView->HandlerAdapter  原生(实现Controller接口覆写方法 modelAndView.addObject .setViewName)
+3.配置:扫描根包 (mapping/adapter)mvc:annotation-driven InternalResourceViewResolver  mvc:resources
+4.注解:@RequestMapping/@Controller/@RequestParam/@ModelAttribute(数据使用param.获取,数组尽量不要回显)/  "forward/redirect"    
+(实体属性为Integer时无需再parseInt,但传入时需要输入指定类型否则报错)
+5.Interceptor实现HandlerInterceptor(预处理和后处理:视图渲染前后) 注册mapping path="/**" 权限监测/性能监控(ThreadLocal/request)
+6.AJAX(配置Adapter增加json转换器的支持) 返回json(@ResponseBody,Controller直接返回对象即可)
+  接收(@RequestBody参数,ajax的url以.json结尾并设置MIME:application/json)
+7.upload,文件视图解析器(CommonsMultipartResolver) MultipartFile file   file.transferTo(pathFather) 多文件前端同键,MultipartFile[] 遍历即可
+8.多视图(JSON/XML),配置对应的视图解析器 之后Controller返回实体对象即可生成视图,注意url以数据类型为后缀,XML实体类设置@XmlRootElement
+9.Restful 七种请求方法类型  url简化:无需再url中指明键 @RequestMapping(value="doLogin/{name}",method=RequestMethod.GET)
+  对参数设置 @PathVariable,参数和占位一致即可  前端:/doLogin/wqq
+10.FreeMarker语法,模板引擎无需转换为class 相关配置实现动态页面静态化  配置FreeMarkerConfigurer的Bean以及视图解析器FreeMarkerViewResolver
+---------------------------------------------------------------------------
+Mybatis
+1.ibatis 获取sqlSession去操作 CUD操作需要提交事务 sql在实体对应配置文件定义 @SelectKey:last_insert_id()/after uuid()/before 
+  机制: 单个实体配置(或mapper)映射到总配置->Factory->sqlSession->(程序代码传入参数,pojo类型数据,对接mysql CRUD动作)
+2.PO/POJO/VO/DAO/DTO/BO 配置文件:typeAliases别名设置 list类型参数遍历循环 根据package去配置扫描mapper根包 resultMap(id/result)输出映射
+3.注解: @Select/@ResutlMap(结合使用) @SelectKey/@Insert @Delete/@Update/@Param(多参数bean需属性导航)/
+   关系映射 一对一 association  一对多 多对多 collection  sql语句需要用到多表连接(左/右外)
+4.sql片段(插入/查询条件不确定) 可抽离 模糊查询时合理利用"$"  自定义sql:传入参数为list的语句比较多时,相关注解 @Lang(ListLangDriver.class)/@Param
+5.spring+mybatis:sqlSession对象直接获取,解耦  
+6.自带缓存机制:一级缓存(SqlSession级别,内部HashMap数据结构存储缓存数据,不同session缓存互不影响)
+  二级缓存(SqlSessionFactory级别,多个sqlSession操作同一个mapper的sql语句共用一个缓存) 缓存存放在同一个tomcat  集群局限性问题
+---------------------------------------------------------------------------
+配置文件具体配置复习
+1.mybatis-config.xml内部没有配置 可配置<settings>对缓存开启类似功能的设置
+2.mybatis-spring-config.xml:数据源连接池/sqlSessionFactory/MapperScannerConfigurer(注解支持)
+3.spring-aop-config.xml:DataSourceTransactionManager(事务管理者)/tx:annotation-driven(事务切面注解支持)
+4.spring-config.xml:扫描根包,引入.properties(共用一个context:property-placeholder标签,否则会覆盖)及xml配置文件
+5.spring-redis-config.xml:配置JedisPoolConfig对象/sentinelConfiguration哨兵配置/jedisConnectionFactory工厂
+  /redisTemplate用来操作Redis/注解支持缓存配置缓存管理者RedisCacheManager
+6.spring-solr-config.xml:配置HttpSolrServer对象
+7.springmvc-config.xml:扫描根包/注解支持/adapter的json转换支持/各种视图解析器/拦截器/静态资源处理
+8.web.xml:ContextLoaderListener加载applicationContext/获取request监听器/MVC自带过滤器/DispatcherServlet/自定义标签注册/CAS子系统
+---------------------------------------------------------------------------
+Spring-AOP
+1.oop面向对象 辅助业务散乱在业务中 结构混乱/代码侵入  AOP 面向切面编程 将辅助业务集中于一个切面上 利用代理模式实现核心功能的前后增强
+2.增强advice/切点PointCut/连接点JoinPoint(实现增强后)/织入机制weaving/切面aspect:包含辅助功能或核心功能的单个模块
+3.spring获取代理对象(配置:增强bean/切点指明实现类/通过切点将增强注入),注意实现类对象的类型实际上已经是代理对象
+4.五种增强类型用于应用场景  mvc拦截器/用户行为记录(业务层afterReturing)/性能分析(AfterRound增强)/异常记录(AfterThrowing)/事务支持
+5.注解:扫描根包(@Component/@Aspect),注解支持 aop:aspectj-autoproxy @PointCut/@Before/@AfterReturing/@AfterThrowing/@Around/@After
+6.AspectJ语法:对切点进行匹配规则的定义 @PointCut(bean("orderServiceImpl"))   /execution(* *..*.*(..)) 修饰符 返回值 包 类 方法(参数列表)
+7.事务支持:配置事务管理者以及事务切面对注解的支持 tx:annotation-driven transaction-manager="id_txManger"
+  @Transactional   七种传播行为:REQUIRED(默认,转账+记录同一个事务)  REQUIRES_NEW/NESTED(转账+发送短信):重新开启事务
+---------------------------------------------------------------------------
+

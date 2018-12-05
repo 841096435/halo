@@ -1,0 +1,78 @@
+总复习啦啦啦啦
+---------------------------------------------------------------------------
+XML
+1.可扩展性标记语言,可对标记语言进行定义的源语言  作用：数据存储，利用配置文件描述关系型数据  不同系统之间进行数据传输
+2.语法格式(根标签唯一、区分大小写、可使用中文)，头声明 转义字符过多放在CDATA区  <![CDATA[...]]>  context-param:上下文参数 init是servlet级别参数，指定servlet中获取
+3.DTD  内容约束：必须为字符串、为空、或者任意值   标签约束：顺序，次数(+至少一次 *任意  ? 0/1)  
+ 属性(内容：字符串、或者枚举类型、或者唯一ID标识 类型：Required必需  非必需 ) 文件引入：(内部直接引入、本地外部dtd文件、网络文件)  
+4.Schema是xml语言规范标准约束，其中一种是xsd文件(仍是xml)  相比较dtd  数据类型更加丰富且贴近于java 
+ 支持命名空间:同一个xml可以被不同的schema约束 引入一种，格式固定
+5.XML解析 三种解析器 jaxp/Jdom/dom4j  两种解析方式
+  DOM：根据其层级结构在内存中形成树形结构，封装成document文档对象，对节点元素进行增删改查操作，增删改操作要将文档最后写回到文件中
+       方便增删改查 文件过大内存溢出
+  SAX:遍读遍解析，事件驱动形式 对查询操作非常友好 不支持增删改
+6.dom4j解析器，可以对节点/内容 及节点属性进行CRUD操作  不会内存溢出
+  XPATH:用来快速定位某个标签的语言 XML Path Language   类似规则表达式 特定的两个方法 获取单一或在多个节点
+        传入符合XPATH语法的表达式  快速定位节点
+7.对XPATH的补充，一般获取某个节点时都是通过其父节点并传入指定节点名称 效率很低
+---------------------------------------------------------------------------
+Linux
+1.点开头隐藏文件  图形界面文本编辑 gedit 终端vim  Linux压缩只针对一个文件,所以先打成tar包 分区挂载fdisk
+2.pwd mkdir touch  cp:拷贝  rm删除  rmdir  rm -f   cat echo  vi  i  esc:wq 强制退出  :set 显示行号  dd删除 yy/p 拷贝删除
+  find 查找  ls -l  ln -s a b  软连接    ln a b 硬   tar  -zxvf mv a b  rz  jps  alt+p  cd  lcd put
+---------------------------------------------------------------------------
+Nginx
+1.反向代理,实现对tomcat集群的负载均衡
+2.配置upstream server即可,在server中指明反向代理身份
+3.集群下session共享，tomcat自带广播机制 消耗大    利用Redis缓存技术 在tomcat的配置文件中指明Redis的Port和IP
+4.动静分离，静态资源没有必要存放在tomcat上，直接存放在Nginx上即可  在配置文件的server标签中设置location和root
+---------------------------------------------------------------------------
+junit
+1.对Java最小单元(类)进行检查验证 Junit3集成TestCase测试用例类 覆写setUp()和tearDown()  Assert断言  assertTrue() 结果:成功/失败/异常报错
+2.单元测试套件一次测试多个类 代码覆盖率   Junit4注解实现   @Test @After @Before  @RunWith 断言格式 Assert.assertTrue()
+3.mock测试框架 环境缺少某个实现类 或者request对象等 EasyMock.createMock(Dao.class)  EasyMock.expect().andReturn()
+  expectLastCall()：处理没有返回值的方法            replay()让模拟场景生效
+4.SpringTest @RunWith(SpringJunit4ClassRunner.class)：更换引擎，使其处于Spring环境下  @ContextConfiguration("classpath:spring-config.xml")
+---------------------------------------------------------------------------
+Maven
+1.标准工程结构项目搭建/jar自动托管依赖  Gradle Ant  常用命令：mvn compile/clean/test/package/install
+2.生命周期，执行后面指令时会将前面指令一并执行  阶段(phase) 生命周期有顺序 后面依赖前面的 (clean/default:常用/site:生成项目站点)
+3.G:组织名称 A：项目名称 V：唯一发行版本号  依赖的jar会存放到本地仓库 ，打包后会存放到目标jar/war中
+4.Scope依赖范围，compile默认，编译运行测试均可见，随项目直接发布  provided:编译和测试有效，指明为容器提供 
+  runtime：测试和运行有效(jdbc) test:只在测试时使用，在编译和运行不起作用
+5.传递依赖/依赖冲突/可选依赖(功能可选)/排除依赖(自带冲突排除) 编译插件JDK1.8/编译java下的.xml配置文件
+6.使用Maven自带tomcat(tomcat:run) 添加插件并执行命令 tomcat7:run 使用本地tomcat(tomcat配置user/插件中指明用户和密码即可) deploy
+7.子父工程，子可以使用父的依赖   dependencyManagement内的依赖只是声明，没有实际依赖  Module可以根据MVC三层划分 也可以SOA面向服务
+  service的Module中对dao的依赖 dao会作为jar部署到本地仓库  所以需要重发布时对该jar包需要先clean ->install  父负责管理packaging:pom
+8.profile环境切换, 项目开发 需求分析 设计 原型 开发(dev) 测试(test) 上线(prod) 将属性文件分别放入dev和prod文件夹
+  指定编译resources下所有文件并排除两个包的文件  再配置一项编译指定包的配置文件    $去获取具体属性值
+---------------------------------------------------------------------------
+SpringMVC集成Swagger
+1.在线自动生成接口文档  配置文件以及依赖  配置类(设置文档名称等信息 IP 联系邮箱等)
+  代码示例 注解: @Api @ApiOperation @ApiParam  返回的Bean @ApiModel @ApiModelProperty
+---------------------------------------------------------------------------
+SSH
+1.Hibernate,自动生成sql语句 面向对象SQL框架 语句展示方言配置   .save()  .delete() .update()
+  查询 .get() 饿加载  .load() 懒加载   总配置文件 实体对应配置文件  
+2.HQL查询：半面向对象、半面向SQL  from Dog    select dogage from Dog where dogage=?  .setParameter()
+  session.createQuery()  query.uniqueResult()  .setProperties(dog)  
+3.原生SQL: createSQLQuery()  .list():返回Object数组形式    设置指定类对象即可 ：sqlQuery.addEntity(Dog.class)
+4.Criteria:完全面向对象，.createCriteria(Dog.class)  criteria.add(Restrictions.eq("dogage", 1));  lt/gt/gte
+   limit限定效果：setFirstResult(0)  setMaxResults(1)  Projections.sum() :聚合函数
+5.底层机制，对象三种状态，瞬时态：都不关联/持久态：都关联/托管态：与数据库关联，与Hibernate的session会话不关联
+  框架封装成面向对象 方法实际上就是在执行sql语句  当对象的属性与数据库中 某行 主键一致时，该对象则对应该行记录
+  持久态对象不能修改主键，主键一旦生成，逻辑不允许修改
+6.mybatis：  半自动(仅有基本字段映射) 数据库移植性低    sql优化较灵活
+  Hibernate：全自动(JavaBean对象与数据库映射结构自动生成sql,对象关系模型)  降低与数据库的耦合(强大的映射结构和hql) 修改方言配置即可  
+7.锁机制 共享锁(读锁)：可多个共存，但最后一个设置才能写操作(select * from table lock in share mode )
+  排他锁(写锁)：自身可以CRUD，不能共存(from table for update)  行锁/表锁/页锁(for update)
+  悲观锁(认为别的线程会修改数据，所以每次都会直接锁上)  
+  乐观锁(默认别的线程不会修改数据，不上锁，在数据提交时会验证数据是否符合逻辑，数据不一致交给业务层处理，回滚或抛异常)
+8.数据库增删改操作默认设置排他锁  悲观锁设置后，其它事务操作会在回滚或锁释放之后执行  写操作少，使用乐观锁 写多使用悲观锁
+  Hibernate配置文件中定义version标签 验证自增 通过则事务提交
+9.Struts2,以WebWork体系结构核心，功能较SpringMVC强大   
+  工程搭建步骤：StrutsPrepareAndExecuteFilter配置分发转向过滤器  *.do  *.action(web.xml)
+  Action的构建 继承ActionSupport类或实现Action接口  并覆写execute()方法
+  利用ServletActionContext获取request和response  配置struts.xml  action name class   <result name="success">index.jsp</> 
+  支持命名空间使用  result中的type属性 可指明跳转方式 dispatcher  redirect  chain  redirectAction 单个空间多个Action
+---------------------------------------------------------------------------
