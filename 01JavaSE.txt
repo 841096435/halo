@@ -18,6 +18,8 @@
 9.线程通信,多个任务不同的线程操作同一数据 .wait()  .notify():唤醒其它线程 实现通信:多个代码块彼此同步(同一个锁)
 10.newSingleThreadExecutor() newScheduledThreadPool()  newFixedThreadPool() 线程池:管理和复用线程
 11.定时器:new Timer()   timer.schedule(new TimeTask(){run()}; ,delay,period)   timer.cancel()
+12.多线程实际应用场景，kafka不像RocketMQ 默认支持并发多线程消费场景，需要手动去控制消费 
+   在线客服系统，对客服任务的配置需要用到多线程技术
 ---------------------------------------------------------------------------
 面向对象
 1.类用来描述功能，对象用来使用功能 OOA(面向对象分析)  OOD(面向对象设计) OOP(面向对象编程)
